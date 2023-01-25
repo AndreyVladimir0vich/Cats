@@ -6,7 +6,7 @@
 // - DELETE (https://cats.petiteweb.dev/api/single/:user/delete/:id)- удалить котика из базы данных by id
 
 const configApi = {
-    url: 'https://cats.petiteweb.dev/api/single/mufasa',
+    url: 'https://cats.petiteweb.dev/api/single/kudesnik',
     headers: {
       Accept: 'application/json',
       'Content-type': 'application/json',
@@ -18,43 +18,46 @@ const configApi = {
       this._url = config.url;
       this._headers = config.headers;
     }
+    _onResponce(res){
+      return res.ok ? res.json() : Promise.reject({...res, message: 'error'});
+    }
     getAllCats() {
       /// отобразить всех котиков
-      fetch(`${this._url}/show`, {
+      return fetch(`${this._url}/show`, {
         method: 'GET',
-      });
+      }).then(this._onResponce);
     }
     getAllCatsId() {
       /// отобразить все возможные айди котиков
-      fetch(`${this._url}/ids`, {
+      return fetch(`${this._url}/ids`, {
         method: 'GET',
-      });
+      }).then(this._onResponce);
     }
     getCatById(id) {
       /// отобразить конкретного котика
-      fetch(`${this._url}/show/${id}`, {
+      return fetch(`${this._url}/show/${id}`, {
         method: 'GET',
-      });
+      }).then(this._onResponce);
     }
     addNewCat(body) {
-      fetch(`${this._url}/add`, {
+      return fetch(`${this._url}/add`, {
         method: 'POST',
         headers: this._headers,
         body: JSON.stringify(body),
-      });
+      }).then(this._onResponce);
     }
     updateCatById(id, data) {
-      fetch(`${this._url}/update/${id}`, {
+      return fetch(`${this._url}/update/${id}`, {
         method: 'PUT',
         headers: this._headers,
         body: JSON.stringify(data),
-      });
+      }).then(this._onResponce);
     }
     deleteCatById(id) {
       /// удалить конкретного котика по айди
-      fetch(`${this._url}/delete/${id}`, {
+      return fetch(`${this._url}/delete/${id}`, {
         method: 'DELETE',
-      });
+      }).then(this._onResponce);
     }
   }
   
