@@ -1,88 +1,60 @@
-// - GET (https://cats.petiteweb.dev/api/single/:user/show) - отобразить всех котиков
-// - GET (https://cats.petiteweb.dev/api/single/:user/ids) - отобразить все возможные айди котиков
-// - GET (https://cats.petiteweb.dev/api/single/:user/show/:id) - отобразить конкретного котика
-// - POST (https://cats.petiteweb.dev/api/single/:user/add) - добавить котика
-// - PUT (https://cats.petiteweb.dev/api/single/:user/update/:id) - изменить информацию о котике
-// - DELETE (https://cats.petiteweb.dev/api/single/:user/delete/:id)- удалить котика из базы данных by id
+// - GET (https://cats.petiteweb.dev/api/single/tatyana_melnick/show) - отобразить всех котиков
+// - GET (https://cats.petiteweb.dev/api/single/tatyana_melnick/ids) - отобразить все возможные айди котиков
+// - GET (https://cats.petiteweb.dev/api/single/tatyana_melnick/show/:id) - отобразить конкретного котика
+// - POST (https://cats.petiteweb.dev/api/single/tatyana_melnick/add) - добавить котика
+// - PUT (https://cats.petiteweb.dev/api/single/tatyana_melnick/update/:id) - изменить информацию о котике
+// - DELETE (https://cats.petiteweb.dev/api/single/tatyana_melnick/delete/:id)- удалить котика из базы данных by id
 
-const configApi = {
-    url: 'https://cats.petiteweb.dev/api/single/kudesnik',
+const url = "https://cats.petiteweb.dev/api/single/kudesnik";
+const getCats = async () => {
+  const response = await fetch(`${url}/show`);
+  const result = await response.json();
+  return result;
+}
+
+const getIdsCats = async () => {
+  const response = await fetch(`${url}/ids`);
+  const result = await response.json();
+  return result;
+}
+
+const getCatById = async (id) => {
+  const response = await fetch(`${url}/show/${id}`);
+  const result = await response.json();
+  return result;
+}
+
+const addCat = async (body) => {
+  const response = await fetch(`${url}/add`, {
     headers: {
-      Accept: 'application/json',
-      'Content-type': 'application/json',
+      "Content-Type": "application/json",
     },
-  };
-  
-  class Api {
-    constructor(config) {
-      this._url = config.url;
-      this._headers = config.headers;
-    }
-    _onResponce(res){
-      return res.ok ? res.json() : Promise.reject({...res, message: 'error'});
-    }
-    getAllCats() {
-      /// отобразить всех котиков
-      return fetch(`${this._url}/show`, {
-        method: 'GET',
-      }).then(this._onResponce);
-    }
-    getAllCatsId() {
-      /// отобразить все возможные айди котиков
-      return fetch(`${this._url}/ids`, {
-        method: 'GET',
-      }).then(this._onResponce);
-    }
-    getCatById(id) {
-      /// отобразить конкретного котика
-      return fetch(`${this._url}/show/${id}`, {
-        method: 'GET',
-      }).then(this._onResponce);
-    }
-    addNewCat(body) {
-      return fetch(`${this._url}/add`, {
-        method: 'POST',
-        headers: this._headers,
-        body: JSON.stringify(body),
-      }).then(this._onResponce);
-    }
-    updateCatById(id, data) {
-      return fetch(`${this._url}/update/${id}`, {
-        method: 'PUT',
-        headers: this._headers,
-        body: JSON.stringify(data),
-      }).then(this._onResponce);
-    }
-    deleteCatById(id) {
-      /// удалить конкретного котика по айди
-      return fetch(`${this._url}/delete/${id}`, {
-        method: 'DELETE',
-      }).then(this._onResponce);
-    }
-  }
-  
-  const api = new Api(configApi);
-  // console.log(api);
-  
-  // const newCat = {
-  //   id: 1673690003098,
-  //   name: 'Motroskn',
-  //   favorite: true,
-  //   rate: 1,
-  //   age: 10,
-  //   description: 'ласковый и пушистый котяра',
-  //   image: 'https://http.cat/100',
-  // };
-  // const newCatUpdated = {
-  //   id: 1673690003098,
-  //   name: 'MotrosknUpdated',
-  //   image: 'https://http.cat/100',
-  // };
-  
-  // api.getAllCats();
-  // api.getAllCatsId();
-  // // api.getCatById(1673690003098);
-  // // api.addNewCat(newCat)
-  // api.updateCatById(1673690003098, newCatUpdated)
-  
-  // api.deleteCatById(1673690003098);
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+  const { message } = await response.json();
+  console.info(message);
+}
+
+const editCat = async (id, body) => {
+  const response = await fetch(`${url}/update/${id}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "PUT",
+    body: JSON.stringify(body),
+  });
+  const { message } = await response.json();
+  console.info(message);
+}
+
+const deleteCat = async (id) => {
+  const response = await fetch(`${url}/delete/${id}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "DELETE",
+  });
+  const { message } = await response.json();
+  console.info(message);
+}
